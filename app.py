@@ -205,7 +205,8 @@ PAYENV = {'wave': 'PAY_WAVE', 'om': 'PAY_OM', 'mixx': 'PAY_MIXX'}
 @api(False)
 def pay_info():
     p = q('select plan,ref,status from manual_pay where uid=? order by id desc limit 1', (g.u['id'],), one=True)
-    return jsonify(methods=[m for m, k in PAYENV.items() if os.environ.get(k)], last=dict(p) if p else None)
+    return jsonify(methods=[m for m, k in PAYENV.items() if os.environ.get(k)], last=dict(p) if p else None,
+                   paydunya=all(os.environ.get(k) for k in ('PAYDUNYA_MASTER_KEY', 'PAYDUNYA_PRIVATE_KEY', 'PAYDUNYA_TOKEN')))
 
 @app.post('/api/pay/target')
 @api(False)
